@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <title>InvestAI - Relatório Profissional</title>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body class="bg-slate-50 p-6 md:p-12">
+    <div class="max-w-4xl mx-auto">
+
+        {% if mensagem_perfil %}
+        <div class="bg-indigo-50 border border-indigo-200 text-indigo-800 px-6 py-4 rounded-2xl mb-6 shadow-sm flex items-center gap-4">
+            <span class="text-2xl">🤖</span>
+            <div>
+                <h3 class="font-bold text-sm uppercase tracking-wider text-indigo-900">Análise Comportamental Concluída</h3>
+                <p class="text-sm">{{ mensagem_perfil }}</p>
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Dashboard de Análise</h1>
+            <a href="{% url 'index' %}" class="px-5 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition font-bold shadow-md">
+                Nova Consulta
+            </a>
+        </div>
+
+        <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
+            <div class="bg-slate-900 px-8 py-6 text-white flex justify-between items-center">
+                <div>
+                    <span class="text-indigo-400 text-xs font-black uppercase">Ativos Analisados</span>
+                    <h2 class="text-xl font-mono">{{ ativos }}</h2>
+                </div>
+                <div class="text-right">
+                    <span class="text-slate-400 text-xs font-black uppercase">Data do Relatório</span>
+                    <p class="text-sm font-medium">{% now "j \d\e F, Y" %}</p>
+                </div>
+            </div>
+
+            <div class="p-8 md:p-12">
+                <div id="content" class="prose prose-slate max-w-none 
+                    prose-headings:text-indigo-700 prose-headings:font-bold 
+                    prose-table:border prose-table:rounded-xl prose-th:bg-slate-100 prose-th:p-4 prose-td:p-4">
+                </div>
+            </div>
+
+            <div class="bg-amber-50 p-6 border-t border-amber-100">
+                <div class="flex gap-3 text-amber-800 italic text-xs">
+                    <span>⚠️</span>
+                    <p>Esta análise é gerada por IA e não substitui a consulta com um profissional financeiro qualificado.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script id="raw-markdown" type="text/markdown">
+{{ resultado|safe }}
+    </script>
+
+    <script>
+        // Pega o conteúdo de texto da tag de script acima
+        const rawText = document.getElementById('raw-markdown').textContent;
+        // Converte para HTML e injeta na div content
+        document.getElementById('content').innerHTML = marked.parse(rawText);
+    </script>
+</body>
+</html>
